@@ -1,6 +1,5 @@
 title: "Householder transformation notes"
 date: 2019-06-27 13:40:00 +0800
-has_math: True
 Category: Math
 Tags: Linear Algebra
 Has_Math: True

@@ -1,6 +1,5 @@
 title: "Matrix decomposition notes"
 date: 2019-08-02 13:40:00 +0800
-has_math: True
 Category: Math
 Tags: Linear Algebra
 Has_Math: True

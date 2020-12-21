@@ -8,23 +8,15 @@ Has_Math: True
 
 這個 library 把 ML 的演算法設計成一個個的 模組, 可以直接用 shell command 呼叫, 因為底層透過 `armadillo` 運算,
 加上專案本身用 C++ 實作, 所以執行效能應該很好, 算是輕快等級的工具.
+官網[https://www.mlpack.org/](https://www.mlpack.org/)可以下載 source
 
-### Build on Mac ###
+### Build on Debian ###
 
-在 Mac 上 build from source 有些環境設定需要注意，在此紀錄一下.
+	sudo apt install libomp-dev libmlpack-dev clang libarmadillo*
 
-必要的相依套件:
+Note：本專案並沒有通過在 Mac 上的驗證（make test），不建議在 Mac 環境使用。
 
-	brew install armadillo boost cmake
-
-選擇性的相依套件:
-
-	brew install libomp
-	brew cask install julia
-
-筆者個人喜好 clang, clang++, 與 [rtags](https://github.com/Andersbakken/rtags) 在 cmake 時會特別註明.
-
-build 指令, 假設我們在 source root 下:
+build 指令, 在 source root 下:
 
 	mkdir build
 	cd build
@@ -33,7 +25,7 @@ build 指令, 假設我們在 source root 下:
 
 不用守在機器前面啦, 大約經過吃一頓飯的時間才可以完成.
 
-# experience MLPack under Mac #
+# experience MLPack #
 
 下載 [https://github.com/mlpack/examples.git](https://github.com/mlpack/examples.git),
 可以體驗一下如何使用，首先到 tools/ 目錄下，開一個虛擬 python 環境
@@ -69,10 +61,6 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 改好後就可以順利 build & run 了#
 
 
-### Build on Debian ###
-
-	sudo apt install libomp-dev libmlpack-dev clang libarmadillo*
-
 
 ### Nvidia Acceleration ###
 
@@ -98,7 +86,7 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 	export NVBLAS_CONFIG_FILE=/etc/nvblas.conf
 
 /etc/nvblas.conf 內容為 [NVBLAS 提供的 nvblas.conf 參考](https://docs.nvidia.com/cuda/nvblas/index.html#configuration_example)
-然後記得重開一個 command console 使之生效。
+然後記得 soruce it 使之生效。
 
 接下來修改 mlpack 的 CMakeList.txt:
 
@@ -109,9 +97,7 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 COMPILER_SUPPORT_LIBRARIES 是給 mlpack_xxx CLI linking 用的
 MLPACK_LIBRARIES 是給 libmlpack.so linkin 用的。
 
-
-接下來與 Mac 的 build 指令相同：
-
+	:::sh
 	mkdir build
 	cd build
 	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
@@ -133,9 +119,9 @@ MLPACK_LIBRARIES 是給 libmlpack.so linkin 用的。
 	改為這樣：
 	LIBS_NAME := nvblas armadillo mlpack boost_serialization
 
-make 成功後，下 ldd 檢驗 NVBLAS 是否用進去：
+make 成功後，下 ldd 檢驗 NVBLAS 是否已經進來？
 
      $ ldd mnist_cnn | grep nvblas
      libnvblas.so.9.2 => /lib/x86_64-linux-gnu/libnvblas.so.9.2 (0x00007fef0a9c7000)
 
-跑起來發現速度比原來快了四倍，真香！
+跑起來發現速度比原來快了大約四倍，真香！
