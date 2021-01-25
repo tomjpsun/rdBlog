@@ -64,52 +64,49 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 
 ### Nvidia Acceleration ###
 
-如果您有 NVidia 繪圖卡, 並且在 Debian 10 安裝了 CUDA driver 的話，那就可以用 Nvidia 繪圖晶片加速。在 [Armadillo Documents](http://arma.sourceforge.net/faq.html#linking) 的討論有提到，將 `-lblas` 換作 `-lopenblas` 就可以用 OpenBLAS 置換 BLAS (Armadillo' default BLAS library)，同理 `-lnvblas` 應該也可以使 NVBLAS drop in replace BLAS，請記得安裝 nvblas 的 package:
 
-	$ apt-file search libnvblas
-	libnvblas10: /usr/lib/x86_64-linux-gnu/libnvblas.so.10
-	libnvblas10: /usr/lib/x86_64-linux-gnu/libnvblas.so.10.2.1.243
-	libnvblas10: /usr/share/doc/libnvblas10/changelog.Debian.gz
-	libnvblas10: /usr/share/doc/libnvblas10/copyright
-	libnvblas10: /usr/share/lintian/overrides/libnvblas10
-	libnvblas9.2: /usr/lib/x86_64-linux-gnu/libnvblas.so.9.2
-	libnvblas9.2: /usr/lib/x86_64-linux-gnu/libnvblas.so.9.2.174
-	libnvblas9.2: /usr/share/doc/libnvblas9.2/changelog.Debian.gz
-	libnvblas9.2: /usr/share/doc/libnvblas9.2/copyright
-	libnvblas9.2: /usr/share/lintian/overrides/libnvblas9.2
-	nvidia-cuda-dev: /usr/lib/x86_64-linux-gnu/libnvblas.so
+如果您有 NVidia 繪圖卡, 並且在 Debian 10 安裝了 CUDA driver 的話，那就可以用 Nvidia 繪圖晶片加速。在 [Armadillo Documents](http://arma.sourceforge.net/faq.html#linking) 的討論有提到，將 `-lblas` 換作 `-lopenblas` 就可以用 OpenBLAS 置換 BLAS (Armadillo' default BLAS library)，同理 `-lnvblas` 應該也可以使 NVBLAS drop in replace BLAS，請記得安裝 nvblas 的 package.
 
-看起來是安裝 `nvidia-cuda-dev` 即可連帶安裝 `libnvblas9.2`（libnvlas.so.10 應該是將來的版本）
+2021-01-26 更新： NVIDIA 提供 nvidia-cuda-toolkit version 11 與 12, 然而 cuDNN 只出到 11,
+所以我們安裝 cuda toolkit 11, 還有, NVIDIA 官網提供的 .deb package 將 CUDA library
+放在 /usr/local/cuda/lib64 下, 也包含新版的 libnvblas, 等下我們會把此路徑告訴 mlpack.
 
-那麼，怎麼加到我們的 `mlpack` build 呢？ 在 [NVBLAS](https://docs.nvidia.com/cuda/nvblas/index.html) 有提到, 要提供 nvblas.conf 檔案，並且由環境變數 _NVBLAS_CONFIG_FILE_ 指名到該檔案。我這邊的做法就直接在 .bashrc 加上這行：
+# nvblas.conf #
 
-	export NVBLAS_CONFIG_FILE=/etc/nvblas.conf
+那麼，怎麼將 nvblas 加到我們的 `mlpack` build 呢？ 在 [NVBLAS](https://docs.nvidia.com/cuda/nvblas/index.html) 有提到,
+要提供 nvblas.conf 檔案, 並且由環境變數 _NVBLAS_CONFIG_FILE_ 指名到該檔案.
+
+	NVBLAS_CONFIG_FILE=/etc/nvblas.conf
 
 /etc/nvblas.conf 內容為 [NVBLAS 提供的 nvblas.conf 參考](https://docs.nvidia.com/cuda/nvblas/index.html#configuration_example)
-然後記得 soruce it 使之生效。
+把它抓下來放在我們的 /etc/ 目錄下.
 
 接下來修改 mlpack 的 CMakeList.txt:
 
-	將      set(COMPILER_SUPPORT_LIBRARIES "")
-	改為     set(COMPILER_SUPPORT_LIBRARIES "nvblas")
-	並加上    set(MLPACK_LIBRARIES  "nvblas")
+	-    set(COMPILER_SUPPORT_LIBRARIES "")
+	+    set(COMPILER_SUPPORT_LIBRARIES "nvblas")
+	+    set(MLPACK_LIBRARIES  "nvblas")
+	+    link_directories(/usr/local/cuda/lib64)
+
 
 COMPILER_SUPPORT_LIBRARIES 是給 mlpack_xxx CLI linking 用的
 MLPACK_LIBRARIES 是給 libmlpack.so linkin 用的。
+link_directories 是增加 link 需要尋找的 lib path (LD_LIBRARY_PATH),
+然後開始 build:
 
 	:::sh
 	mkdir build
 	cd build
 	cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..
-	sudo make install
+	sudo NVBLAS_CONFIG_FILE=/etc/nvblas.conf make install
 
 檢查一下是否真的有效：
 
+	:::sh
 	$ ldd /usr/local/lib/libmlpack.so | grep nvblas
-	libnvblas.so.9.2 => /lib/x86_64-linux-gnu/libnvblas.so.9.2 (0x00007f6f2fec2000)
+	  libnvblas.so.11 => /usr/local/cuda-11.1/targets/x86_64-linux/lib/libnvblas.so.11 (0x00007f8b3e9a5000)
 
-	$ ldd /usr/local/bin/mlpack_sparse_coding | grep nvblas
-	libnvblas.so.9.2 => /lib/x86_64-linux-gnu/libnvblas.so.9.2 (0x00007f044a33c000)
+
 
 如同前面的方式，下載 mlpack-examples，並且用 mnist_cnn 來試驗：
 
@@ -122,6 +119,4 @@ MLPACK_LIBRARIES 是給 libmlpack.so linkin 用的。
 make 成功後，下 ldd 檢驗 NVBLAS 是否已經進來？
 
      $ ldd mnist_cnn | grep nvblas
-     libnvblas.so.9.2 => /lib/x86_64-linux-gnu/libnvblas.so.9.2 (0x00007fef0a9c7000)
-
-跑起來發現速度比原來快了大約四倍，真香！
+	   libnvblas.so.11 => /usr/local/cuda/lib64/libnvblas.so.11 (0x00007fbec4fed000)

@@ -1,5 +1,5 @@
-title: Install CUDA-11.1 For TensorFlow 2.0
-slug: install_cuda_tools_for_tensorflow
+title: Install CUDA-toolkit-11.1 For TensorFlow 2.0
+slug: install_cuda_toolkit_for_tensorflow
 date: 2021-01-24 12:33:45 UTC+08:00
 type: text
 
