@@ -4,9 +4,9 @@ Category: Math
 Tags: Linear Algebra
 Has_Math: True
 
-$$ \newcommand{\inner}[2] {\langle {#1},{#2} \rangle} \
+\newcommand{\inner}[2] {\langle {#1},{#2} \rangle} \
 \newcommand{\norm}[1] {\|{#1}\|} \
-\newcommand{\normalize}[1] {\frac{#1}{\|{#1}\|}} $$
+\newcommand{\normalize}[1] {\frac{#1}{\|{#1}\|}}
 
 本文內容來自 [Mayer 的著作: Matrix Analysis and Applied Linear Algebra](https://www.amazon.com/Matrix-analysis-applied-linear-algebra/dp/0898714540)
 
@@ -24,11 +24,11 @@ $U^*U = I$
 
 Unitary 保模長, 所以 $x \in \mathbb{R}^n$ 有：
 
-$\| Ux\|^2 = \inner{Ux}{Ux} = (Ux)^*Ux = x^*U^*Ux = x^*x =  \| x\|^2$
+$| Ux|^2 = < Ux,Ux > = (Ux)^\* Ux = x^\*U^\*Ux = x^\*x =  | x|^2$
 
 保內積, 所以:
 
-$\inner{Ux}{Uy} = (Uy)^*(Ux) = y^*U^*Ux = y^*x = \inner{x}{y}$
+$<{Ux},{Uy}> = (Uy)^\*(Ux) = y^\*U^\*Ux = y^\*x = <{x},{y}>$
 
 #Elementary Orthogonal Projector#
 
@@ -40,15 +40,15 @@ $$Q = I - uu^* \tag 1 $$
 
 ![](/images/project_operator.png)
 
-圖中, $(uu^*)x = u(u^*x) = \inner{x}{u}u$ 即為 $x$ 投影到 $u$ 的分量.
+圖中, $(uu^\*)x = u(u^\*x) = <{x},{u}>u$ 即為 $x$ 投影到 $u$ 的分量.
 
-故 $x-uu^*x = (I-uu^*)x$ 即為 $x$ 投影到 $u^\perp$ 的分量
+故 $x-uu^\*x = (I-uu^\*)x$ 即為 $x$ 投影到 $u^\perp$ 的分量
 
 #Elementary Reflector#
 
-給定任意向量 $u \in \mathbb{C}^n, \hat u = \normalize{u}$, 我們可以定義 Elementary Reflector $R$:
+給定任意向量 $u \in \mathbb{C}^n, \hat u = \frac {u}{|u|}$, 我們可以定義 Elementary Reflector $R$:
 
-$$ R = I - 2 \hat u \hat u^* = I - 2 \frac{uu^*}{u^*u} = I - 2 \frac{uu^*}{\norm{u}^2} \tag 2 $$
+$$ R = I - 2 \hat u \hat u^\* = I - 2 \frac{uu^\*}{u^\*u} = I - 2 \frac{uu^\*}{|{u}|^2} \tag 2 $$
 
 請看下圖理解：
 
@@ -58,7 +58,7 @@ $$ R = I - 2 \hat u \hat u^* = I - 2 \frac{uu^*}{u^*u} = I - 2 \frac{uu^*}{\norm
 
 我們想要將任意 $x$ 用 reflector 投影到該 basis, 那麼如何找出那個 Reflect operator 呢？
 
-先 normalize $x$, 令 $\hat x = \normalize{x}$
+先 normalize $x$, 令 $\hat x = \frac {x}{|x|}$
 
 那麼 $\hat x, e_k$ 形成菱形的兩個相鄰邊(都是 1 單位長), 如下圖:
 
@@ -75,36 +75,34 @@ $$u = \hat x - e_k \tag 3$$
 
 令 $\hat x_k$ 為 $x$ 的第 k 個座標值, 我們很容易驗證:
 
-$$u^*u = 2(u^*\hat x) \tag 4 $$
 
-$$\begin{align}
-u^*u &= (\hat x^*-e_k^*)(\hat x - e_k) \tag {by(3)} \\
-     &= \hat x^*\hat x - e_k^*\hat x - \hat x^*e_k + e_k^*e_k \\
-	 &= 1 - \hat x_k - \hat x_k + 1 \\
-	 &= 2(1 - \hat x_k)	 \\
-	 \\
-u^*\hat x &= \hat x^*\hat x - e_k^*\hat x \\
-	 &= 1 - \hat x_k
-\end{align} $$
+$$u^\*u = 2(u^\*\hat x) \tag 4 $$
+
+$$u^\*u = (\hat x^\*-e_k^\*)(\hat x - e_k) \\
+= \hat x^\*\hat x - e_k^\*\hat x - \hat x^\*e_k + e_k^\*e_k \\
+= 1 - \hat x_k - \hat x_k + 1 = 2(1 - \hat x_k), \quad and
+$$
+
+$$u^\*\hat x = \hat x^\*\hat x - e_k^\*\hat x \\
+= 1 - \hat x_k
+$$
 
 由(2)
 
-$$\begin{align}
-Rx &= \norm{x}R\hat x  \quad \quad \tag {by (2)} \\
-   &= \norm{x}(\hat x - 2\frac{uu^*\hat x}{u^*u}) \quad \quad \quad (u^* \hat x \; is \; scalar) \\
-   &= \norm{x}(\hat x - 2\frac{u^*\hat x}{u^*u}u)  \tag {by (4)} \\
-   &= \norm{x}(\hat x - u) \tag {by (3)} \\
-   &= \norm{x}e_k \tag 5 \
-\end{align}
+$$Rx = |{x}|R\hat x  \\
+   = |{x}|(\hat x - 2\frac{uu^\*\hat x}{u^\*u}) (u^\* \hat x \; is \; scalar) \\
+   = |{x}|(\hat x - 2\frac{u^\*\hat x}{u^\*u}u) \\
+   = |{x}|(\hat x - u)  ( by(4) ) \\
+   = |{x}|e_k \tag 5 \\
 $$
 
 果然可以將 $x$ 鏡像映射到 $e_k$
 
 整理一下, 給定 $x,e_k$ 就可以定出 Elementary Reflector 將 $x$ 映射到 $e_k$:
 
-$$ R = I - 2 \frac{uu^*}{\norm{u}^2} $$
+$$ R = I - 2 \frac{uu^*}{|{u}|^2} $$
 
-其中 $u = \normalize{x} - e_k$
+其中 $u = \frac{x}{|x|} - e_k$
 
 #Orthogonal Reduction (Householder Reduction)#
 
