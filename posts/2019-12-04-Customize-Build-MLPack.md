@@ -45,7 +45,7 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 
 	cd mnist_cnn
 
-修改 Makefile 使得能夠在 Mac 下使用 OpemMP lib (以下為 diff 表示)：
+修改 Makefile 使用 OpemMP lib (以下為 diff 表示)：
 
 	-CXXFLAGS += -std=c++11 -Wall -Wextra -O3 -DNDEBUG -fopenmp
 	+CXXFLAGS += -std=c++11 -Wall -Wextra -O3 -DNDEBUG -Xpreprocessor -fopenmp
@@ -80,6 +80,11 @@ Readme 說明有許多展示範例，舉例來說，我們對 mnist-cnn 有興�
 
 /etc/nvblas.conf 內容為 [NVBLAS 提供的 nvblas.conf 參考](https://docs.nvidia.com/cuda/nvblas/index.html#configuration_example)
 把它抓下來放在我們的 /etc/ 目錄下.
+
+2022/2/19 修改：
+nvblas.conf 裏面
+NVBLAS_CPU_BLAS_LIB 改爲  /usr/lib/x86_64-linux-gnu/openblas-openmp/libopenblas.so,
+配合安裝 libopenblas-openmp-dev package.
 
 接下來修改 mlpack 的 CMakeList.txt:
 

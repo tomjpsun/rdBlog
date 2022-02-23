@@ -65,7 +65,7 @@ $$ R = I - 2 \hat u \hat u^* = I - 2 \frac{uu^*}{u^*u} = I - 2 \frac{uu^*}{\norm
 ![](/images/find_orthogonal_u.png)
 
 
-由於菱形是對稱的, $\hat x + e_k$ 可以當鏡射線, 將 $x$ 鏡射到 $e_k$,
+由於菱形是對稱的, $\hat x + e_k$ 可以當鏡射線, 將 $\hat x$ 鏡射到 $e_k$,
 
 又 $\hat x + e_k$ 會與我們要找的 $u$ 垂直, 因為菱形的對角線就是互相垂直, 很明顯的取
 

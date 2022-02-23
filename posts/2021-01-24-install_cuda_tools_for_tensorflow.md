@@ -22,7 +22,7 @@ type: text
 
 		sudo dpkg -i [cuDNN lib].deb
 
-檢測, 跑下面的 neuron.py 程式：
+檢測, 跑下面的 neuron.py 程式： [後記]
 
 		from tensorflow import keras
 		from tensorflow.keras import layers
@@ -80,6 +80,12 @@ type: text
 	(ENV) tom@atlantic:~/work/PythonProj/kaggle-dl-course/sec-1$
 
 
-其中 'Successfully opened dynamic library libcu*' 都成功, 表示安裝 OK
+其中 ##Successfully opened dynamic library libcu*## 都成功, 表示安裝 OK
 
-#
+
+[後記]
+目前 cuda-11-1 相容版本為
+
+	tensorflow             2.4
+
+NVIDIA 監控工具： nvtop, nvidia-smi
