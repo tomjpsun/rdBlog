@@ -38,7 +38,7 @@ $$\vert B_S (p, 2\Delta) \vert \leq c \vert B_S (p, \Delta) \vert \quad \forall 
 
 我們改用口語描述 Expension Constant： 就是`一個節點，下一階的節點數量的最小值`
 
-(1)左式  $\vert B_S (p, 2\Delta) \vert$ 代表上一階的節點範圍 $ 2\Delta$ 內的點數量
+(1)左式  $\vert B_S (p, 2\Delta) \vert$ 代表上一階的節點範圍 $2\Delta$ 內的點數量
 
 (1)右式  $\vert B_S (p, \Delta) \vert$ 代表本階的節點範圍 $\Delta$ 內的點數量，
 取本階 nodes 代表的點時，有許多選擇，但是會出現某種選法，使得本階從上階分裂出來的節點儘量少。
