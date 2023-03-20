@@ -15,7 +15,7 @@ for the level beneath it. Each level is indexed by an integer scale $s_i$ which
 decreases as the tree is descended. Every node in the tree is associated with a
 point in $S$ . Each point in $S$ may be associated with multiple nodes in the tree;
 however, we require that any point appears at most once in every level. Let $C_{s_i}$
-denote the set of points in S associated with the nodes at level si. The cover
+denote the set of points in S associated with the nodes at level $s_i$. The cover
 tree obeys the following invariants for all $s_i$:
 
 $(Nesting). C_{s_i} \subset C_{s_i - 1}.$ This implies that once a point $p \in S$ appears in
